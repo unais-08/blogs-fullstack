@@ -9,7 +9,7 @@ export interface JwtPayload {
 export class JwtUtil {
   static sign(payload: JwtPayload): string {
     const options: SignOptions = {
-      expiresIn: parseInt(jwtConfig.expiresIn, 10),
+      expiresIn: jwtConfig.expiresIn,
       algorithm: jwtConfig.algorithm,
       issuer: jwtConfig.issuer,
       audience: jwtConfig.audience,

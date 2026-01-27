@@ -12,11 +12,7 @@ const blogController = new BlogController(blogService);
 
 const router = Router();
 
-// Public routes
-router.get("/", blogController.getAllBlogs);
-router.get("/:id", blogController.getBlogById);
-
-// Protected routes
+// Protected routes (must come before :id route to avoid conflicts)
 router.post(
   "/",
   authenticate,
@@ -25,5 +21,9 @@ router.post(
 );
 
 router.get("/my/blogs", authenticate, blogController.getMyBlogs);
+
+// Public routes
+router.get("/", blogController.getAllBlogs);
+router.get("/:id", blogController.getBlogById);
 
 export { router as blogRoutes };
