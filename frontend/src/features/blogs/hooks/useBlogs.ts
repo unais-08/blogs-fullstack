@@ -1,10 +1,10 @@
 /**
  * useBlogs Hook
- * Custom hook for fetching all blogs
+ * Custom hook for fetching all blogs from context (optimized with caching)
  */
 
-import { useState, useEffect } from "react";
-import { blogsApi } from "../api/blogs.api";
+import { useEffect, useContext } from "react";
+import { BlogContext } from "../context/BlogContext";
 import type { BlogResponse } from "@/types/api";
 
 interface UseBlogsReturn {
@@ -15,33 +15,23 @@ interface UseBlogsReturn {
 }
 
 export const useBlogs = (): UseBlogsReturn => {
-  const [blogs, setBlogs] = useState<BlogResponse[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const context = useContext(BlogContext);
 
-  const fetchBlogs = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const data = await blogsApi.getBlogs();
-      setBlogs(data);
-    } catch (err) {
-      console.error("Error fetching blogs:", err);
-      setError("Failed to fetch blogs. Please try again.");
-      setBlogs([]); // Set empty array on error
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  if (!context) {
+    throw new Error("useBlogs must be used within a BlogProvider");
+  }
+
+  const { blogs, isLoading, error, fetchAllBlogs } = context;
 
   useEffect(() => {
-    fetchBlogs();
-  }, []);
+    // Fetch only if not already loaded (context handles caching)
+    fetchAllBlogs();
+  }, [fetchAllBlogs]);
 
   return {
     blogs,
     isLoading,
     error,
-    refetch: fetchBlogs,
+    refetch: () => fetchAllBlogs(true), // Force refetch when explicitly requested
   };
 };

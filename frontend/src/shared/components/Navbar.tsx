@@ -81,7 +81,7 @@ export const Navbar = () => {
               size="sm"
               variant="outline"
               onClick={handleLogout}
-              className="border-[#7843e9] text-[#7843e9] hover:bg-[#7843e9] hover:text-white font-bold uppercase tracking-tighter"
+              // className="border-[#7843e9] text-[#7843e9] hover:bg-[#7843e9] hover:text-white font-bold uppercase tracking-tighter"
             >
               Logout
             </Button>

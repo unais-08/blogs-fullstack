@@ -4,11 +4,17 @@
  */
 import { useParams, useNavigate } from "react-router";
 import { MainLayout } from "@/shared/layouts/MainLayout";
-import { Button, Loader, Alert, Card } from "@/shared/components";
+import {
+  Button,
+  Loader,
+  Alert,
+  Card,
+  MarkdownRenderer,
+} from "@/shared/components";
 import { formatDateTime } from "@/shared/utils";
 import { useBlog } from "../hooks/useBlog";
 import { ROUTES } from "@/constants";
-import { ArrowLeft, Calendar, User, Share2 } from "lucide-react";
+import { ArrowLeft, Calendar, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export const BlogDetailPage = () => {
@@ -93,7 +99,7 @@ export const BlogDetailPage = () => {
               {blog.category || "Technical Article"}
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-[#111] leading-[1.1] mb-8">
+            <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-[#111] leading-[1.1] mb-8">
               {blog.title}
             </h1>
 
@@ -123,12 +129,7 @@ export const BlogDetailPage = () => {
 
           {/* Main Content Area */}
           <Card className="border-none shadow-none bg-transparent">
-            <div className="prose prose-lg prose-slate max-w-none">
-              <div
-                className="text-[#333] leading-[1.8] text-lg font-medium whitespace-pre-wrap selection:bg-[#7843e9] selection:text-white"
-                dangerouslySetInnerHTML={{ __html: blog.content }}
-              />
-            </div>
+            <MarkdownRenderer content={blog.content} />
           </Card>
 
           {/* About Author Section - Mirroring Hero Aesthetic */}

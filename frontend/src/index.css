@@ -1,1 +1,40 @@
 @import "tailwindcss";
+
+/* Syntax highlighting for code blocks - dark theme matching design system */
+.hljs {
+  background: #1e1e1e;
+  color: #d4d4d4;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section,
+.hljs-link {
+  color: #7843e9;
+}
+
+.hljs-string,
+.hljs-attr {
+  color: #ce9178;
+}
+
+.hljs-number {
+  color: #b5cea8;
+}
+
+.hljs-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+
+.hljs-title,
+.hljs-name,
+.hljs-type {
+  color: #4ec9b0;
+}
+
+.hljs-function,
+.hljs-params {
+  color: #dcdcaa;
+}

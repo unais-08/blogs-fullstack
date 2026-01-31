@@ -6,12 +6,15 @@
 import { BrowserRouter } from "react-router";
 import { AuthProvider } from "./providers/AuthProvider";
 import { AppRouter } from "./router";
+import { BlogProvider } from "@/features/blogs/context/BlogContext";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <AppRouter />
+        <BlogProvider>
+          <AppRouter />
+        </BlogProvider>
       </AuthProvider>
     </BrowserRouter>
   );

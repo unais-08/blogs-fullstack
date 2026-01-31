@@ -2,6 +2,9 @@
  * Utility Functions
  */
 
+// Export validation utilities
+export * from "./validation";
+
 /**
  * Format date to readable string
  * Handles both Date objects and ISO strings from API
@@ -55,9 +58,25 @@ export const debounce = <T extends (...args: unknown[]) => unknown>(
 
 /**
  * Generate excerpt from content
+ * Handles both plain text and Markdown content
  */
 export const generateExcerpt = (content: string, maxLength = 150): string => {
-  const stripped = content.replace(/<[^>]+>/g, "");
+  // Strip HTML tags
+  let stripped = content.replace(/<[^>]+>/g, "");
+
+  // Strip Markdown syntax
+  stripped = stripped
+    .replace(/#{1,6}\s+/g, "") // Remove heading markers
+    .replace(/(\*\*|__)(.*?)\1/g, "$2") // Remove bold
+    .replace(/(\*|_)(.*?)\1/g, "$2") // Remove italic
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // Remove links, keep text
+    .replace(/`{1,3}[^`]*`{1,3}/g, "") // Remove code blocks/inline code
+    .replace(/^>\s+/gm, "") // Remove blockquotes
+    .replace(/^[-*+]\s+/gm, "") // Remove list markers
+    .replace(/^\d+\.\s+/gm, "") // Remove ordered list markers
+    .replace(/\n+/g, " ") // Replace newlines with spaces
+    .trim();
+
   return truncateText(stripped, maxLength);
 };
 
