@@ -1,32 +1,44 @@
 /**
  * BlogDetailPage Component
- * Single blog detail page
+ * Redesigned for premium readability with the high-contrast purple theme
  */
-
 import { useParams, useNavigate } from "react-router";
 import { MainLayout } from "@/shared/layouts/MainLayout";
 import { Button, Loader, Alert, Card } from "@/shared/components";
 import { formatDateTime } from "@/shared/utils";
 import { useBlog } from "../hooks/useBlog";
 import { ROUTES } from "@/constants";
+import { ArrowLeft, Calendar, User, Share2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export const BlogDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { blog, isLoading, error } = useBlog(id || "");
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Safely convert date to string for dateTime attribute
-  const dateTimeString = blog
-    ? typeof blog.createdAt === "string"
-      ? blog.createdAt
-      : blog.createdAt.toISOString()
-    : "";
+  // Handle Reading Progress
+  useEffect(() => {
+    const updateProgress = () => {
+      const currentScroll = window.scrollY;
+      const scrollHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollHeight) {
+        setScrollProgress((currentScroll / scrollHeight) * 100);
+      }
+    };
+    window.addEventListener("scroll", updateProgress);
+    return () => window.removeEventListener("scroll", updateProgress);
+  }, []);
 
   if (isLoading) {
     return (
       <MainLayout>
-        <div className="flex justify-center py-12">
-          <Loader size="lg" text="Loading blog..." />
+        <div className="flex flex-col items-center justify-center py-24 gap-4">
+          <Loader size="lg" />
+          <span className="font-black uppercase tracking-[0.2em] text-[#7843e9] text-xs">
+            Loading Story...
+          </span>
         </div>
       </MainLayout>
     );
@@ -35,12 +47,15 @@ export const BlogDetailPage = () => {
   if (error || !blog) {
     return (
       <MainLayout>
-        <div className="max-w-3xl mx-auto">
-          <Alert variant="error" className="mb-6">
+        <div className="max-w-3xl mx-auto py-12">
+          <Alert
+            variant="error"
+            className="mb-6 font-bold uppercase text-xs tracking-widest"
+          >
             {error || "Blog not found"}
           </Alert>
-          <Button onClick={() => navigate(ROUTES.BLOGS)}>
-            ← Back to Blogs
+          <Button onClick={() => navigate(ROUTES.BLOGS)} variant="outline">
+            <ArrowLeft size={16} className="mr-2" /> Back to Collection
           </Button>
         </div>
       </MainLayout>
@@ -49,56 +64,78 @@ export const BlogDetailPage = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-4xl mx-auto">
-        <Button
-          variant="outline"
-          size="sm"
+      {/* Sticky Reading Progress Bar */}
+      <div className="fixed top-20 left-0 z-50 h-1.5 w-full bg-slate-100">
+        <div
+          className="h-full bg-[#7843e9] transition-all duration-150 ease-out"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4">
+        {/* Navigation */}
+        <button
           onClick={() => navigate(ROUTES.BLOGS)}
-          className="mb-6"
+          className="group mb-10 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 transition-colors hover:text-[#7843e9]"
         >
-          ← Back to Blogs
-        </Button>
+          <ArrowLeft
+            size={14}
+            strokeWidth={3}
+            className="transition-transform group-hover:-translate-x-1"
+          />
+          Back to Blogs
+        </button>
 
-        <Card>
-          <article>
-            <header className="mb-6 pb-6 border-b border-gray-200">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                {blog.title}
-              </h1>
+        <article className="relative">
+          {/* Article Header */}
+          <header className="mb-12 text-center">
+            <div className="mb-6 inline-block bg-[#7843e91a] px-4 py-1 rounded text-[10px] font-black uppercase tracking-widest text-[#7843e9]">
+              {blog.category || "Technical Article"}
+            </div>
 
-              <div className="flex items-center gap-3 text-gray-600">
-                {blog.author && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
-                        {blog.author.name.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">
-                          {blog.author.name}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          {blog.author.email}
-                        </p>
-                      </div>
-                    </div>
-                    <span>•</span>
-                  </>
-                )}
-                <time dateTime={dateTimeString} className="text-sm">
-                  {formatDateTime(blog.createdAt)}
-                </time>
+            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight text-[#111] leading-[1.1] mb-8">
+              {blog.title}
+            </h1>
+
+            <div className="flex flex-wrap items-center justify-center gap-6 border-y border-slate-100 py-6">
+              <div className="flex items-center gap-2">
+                <div className="h-8 w-8 rounded-full bg-[#7843e9] flex items-center justify-center text-white text-xs font-black">
+                  {blog.author?.name.charAt(0)}
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#111]">
+                  {blog.author?.name}
+                </span>
               </div>
-            </header>
+              <div className="flex items-center gap-2 text-slate-400">
+                <Calendar size={14} />
+                <span className="text-[10px] font-black uppercase tracking-widest">
+                  {formatDateTime(blog.createdAt)}
+                </span>
+              </div>
+              <button className="flex items-center gap-2 text-[#7843e9] hover:opacity-70 transition-opacity">
+                <Share2 size={14} />
+                <span className="text-[10px] font-black uppercase tracking-widest">
+                  Share
+                </span>
+              </button>
+            </div>
+          </header>
 
-            <div className="prose prose-lg max-w-none">
+          {/* Main Content Area */}
+          <Card className="border-none shadow-none bg-transparent">
+            <div className="prose prose-lg prose-slate max-w-none">
               <div
-                className="text-gray-800 leading-relaxed whitespace-pre-wrap"
+                className="text-[#333] leading-[1.8] text-lg font-medium whitespace-pre-wrap selection:bg-[#7843e9] selection:text-white"
                 dangerouslySetInnerHTML={{ __html: blog.content }}
               />
             </div>
-          </article>
-        </Card>
+          </Card>
+
+          {/* About Author Section - Mirroring Hero Aesthetic */}
+          <footer className="mt-20 border-t-4 border-[#111] pt-12">
+            <div className="bg-[#f8f8f8] p-8 md:p-12 relative overflow-hidden"></div>
+          </footer>
+        </article>
       </div>
     </MainLayout>
   );

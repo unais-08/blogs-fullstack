@@ -1,6 +1,6 @@
 /**
  * Button Component
- * Reusable button with multiple variants and sizes
+ * Updated for high-contrast purple theme with uppercase bold styling
  */
 
 import { type ButtonHTMLAttributes, type ReactNode } from "react";
@@ -17,18 +17,22 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
-  secondary: "bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500",
+  // Brand Purple from screenshot
+  primary:
+    "bg-[#7843e9] text-white hover:bg-[#6a36db] focus:ring-[#7843e9] shadow-[0_5px_15px_rgba(0,0,0,0.15)] active:translate-y-0.5",
+  // Darker purple for UI elements like chat bubbles
+  secondary: "bg-[#3f21b3] text-white hover:bg-[#331b94] focus:ring-[#3f21b3]",
   danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500",
   success: "bg-green-600 text-white hover:bg-green-700 focus:ring-green-500",
+  // Transparent variant used in "Get Started" buttons
   outline:
-    "bg-transparent border-2 border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500",
+    "bg-transparent border-2 border-[#7843e9] text-[#7843e9] hover:bg-[#7843e910] focus:ring-[#7843e9]",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "px-3 py-1.5 text-sm",
-  md: "px-4 py-2 text-base",
-  lg: "px-6 py-3 text-lg",
+  sm: "px-6 py-2 text-xs tracking-widest",
+  md: "px-10 py-3 text-sm tracking-widest",
+  lg: "px-14 py-4 text-base tracking-widest", // Matches the hero button scale
 };
 
 export const Button = ({
@@ -41,8 +45,9 @@ export const Button = ({
   className = "",
   ...props
 }: ButtonProps) => {
+  // Added 'uppercase' and 'font-black' to match the design's text style
   const baseClasses =
-    "font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+    "cursor-pointer font-black uppercase rounded-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed text-center";
 
   const classes = [
     baseClasses,
@@ -56,8 +61,8 @@ export const Button = ({
     <button className={classes} disabled={disabled || isLoading} {...props}>
       {isLoading ? (
         <span className="flex items-center justify-center gap-2">
-          <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          Loading...
+          <span className="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+          <span>Loading...</span>
         </span>
       ) : (
         children

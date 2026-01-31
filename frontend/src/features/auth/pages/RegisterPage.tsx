@@ -100,13 +100,6 @@ export const RegisterPage = () => {
   return (
     <AuthLayout>
       <Card>
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Join our community of writers
-          </p>
-        </div>
-
         {error && (
           <Alert variant="error" className="mb-4" onClose={clearError}>
             {error}

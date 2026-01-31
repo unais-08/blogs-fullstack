@@ -1,152 +1,125 @@
 /**
  * HomePage Component
- * Landing page of the application
+ * Redesigned to match the high-contrast geometric theme with purple accents
  */
-
-import { Link } from "react-router";
+import { Link } from "react-router"; // Updated to standard react-router-dom
 import { MainLayout } from "@/shared/layouts/MainLayout";
 import { Button, Card } from "@/shared/components";
 import { ROUTES } from "@/constants";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { Github, Linkedin, Twitter, Youtube, BookOpen } from "lucide-react";
 
 export const HomePage = () => {
   const { isAuthenticated } = useAuth();
 
   return (
     <MainLayout>
-      <div className="max-w-7xl mx-auto">
-        {/* Hero Section */}
-        <section className="text-center py-16 mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            Welcome to <span className="text-blue-600">Blog Platform</span>
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Discover amazing stories, share your thoughts, and connect with
-            writers from around the world.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Link to={ROUTES.BLOGS}>
-              <Button size="lg">Explore Blogs</Button>
-            </Link>
-            {!isAuthenticated && (
-              <Link to={ROUTES.REGISTER}>
-                <Button size="lg" variant="outline">
-                  Get Started
-                </Button>
-              </Link>
-            )}
-            {isAuthenticated && (
-              <Link to={ROUTES.CREATE_BLOG}>
-                <Button size="lg" variant="success">
-                  Write a Blog
-                </Button>
-              </Link>
-            )}
-          </div>
-        </section>
+      {/* Social Sidebar - Matches Screenshot */}
+      <div className="fixed left-0 top-1/2 z-50 hidden -translate-y-1/2 flex-col bg-white p-2 shadow-2xl md:flex">
+        {[Linkedin, Twitter, Youtube, Github, BookOpen].map((Icon, idx) => (
+          <a
+            key={idx}
+            href="#"
+            className="p-4 text-[#333] transition-colors hover:bg-[#7843e91a] hover:text-[#7843e9]"
+          >
+            <Icon size={24} />
+          </a>
+        ))}
+      </div>
 
-        {/* Features Section */}
-        <section className="py-12">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            Why Choose Our Platform?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-8 h-8 text-blue-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Easy Writing</h3>
-                <p className="text-gray-600">
-                  Create and publish your blogs with our simple and intuitive
-                  editor.
-                </p>
-              </div>
-            </Card>
+      <div className="relative">
+        {/* Hero Section with Geometric Background */}
+        <section className="relative flex min-h-[85vh] items-center justify-center bg-[#f8f8f8] px-4 py-20 text-center">
+          {/* Subtle Background Pattern */}
+          <div
+            className="absolute inset-0 opacity-30"
+            style={{
+              backgroundImage: `url('https://www.transparenttextures.com/patterns/cubes.png')`,
+            }}
+          />
 
-            <Card>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-8 h-8 text-green-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">
-                  Growing Community
-                </h3>
-                <p className="text-gray-600">
-                  Join thousands of writers and readers sharing their stories.
-                </p>
-              </div>
-            </Card>
+          <div className="relative z-10 max-w-5xl">
+            <h1 className="text-5xl font-black uppercase tracking-widest text-[#111] md:text-5xl">
+              Welcome to <span className="text-[#7843e9]">Dev Blogs</span>
+            </h1>
 
-            <Card>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-8 h-8 text-purple-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Secure & Private</h3>
-                <p className="text-gray-600">
-                  Your data is protected with industry-standard security
-                  practices.
-                </p>
-              </div>
-            </Card>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        {!isAuthenticated && (
-          <section className="py-16 text-center bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl mt-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Ready to Start Writing?
-            </h2>
-            <p className="text-lg text-gray-600 mb-8">
-              Join our community and share your unique perspective with the
-              world.
+            <p className="mx-auto mt-8 max-w-2xl text-lg font-medium leading-relaxed text-[#444] md:text-xl uppercase tracking-tight">
+              A Result-Oriented platform for building and managing insightful
+              articles that lead to the success of the developer community.
             </p>
-            <Link to={ROUTES.REGISTER}>
-              <Button size="lg" variant="primary">
-                Create Your Account
-              </Button>
-            </Link>
-          </section>
-        )}
+
+            <div className="mt-12 flex flex-wrap gap-6 justify-center">
+              <Link to={ROUTES.BLOGS}>
+                <Button size="lg">Explore Blogs</Button>
+              </Link>
+
+              {!isAuthenticated ? (
+                <Link to={ROUTES.REGISTER}>
+                  <Button size="lg" variant="outline">
+                    Get Started
+                  </Button>
+                </Link>
+              ) : (
+                <Link to={ROUTES.CREATE_BLOG}>
+                 
+                  <Button size="lg" variant="outline">
+                    Write a Blog
+                  </Button>
+                </Link>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section - Clean White Background */}
+        <section className="bg-white py-24 px-8">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-4xl font-black text-center text-[#111] uppercase tracking-widest mb-20">
+              Platform Features
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              <FeatureCard
+                title="Easy Writing"
+                desc="Create and publish your blogs with our simple and intuitive editor."
+                color="bg-purple-100 text-[#7843e9]"
+              />
+              <FeatureCard
+                title="Growing Community"
+                desc="Join thousands of writers and readers sharing their stories daily."
+                color="bg-purple-100 text-[#7843e9]"
+              />
+              <FeatureCard
+                title="Secure & Private"
+                desc="Your data is protected with industry-standard security practices."
+                color="bg-purple-100 text-[#7843e9]"
+              />
+            </div>
+          </div>
+        </section>
       </div>
     </MainLayout>
   );
 };
+
+// Modular Helper for Feature Cards
+const FeatureCard = ({
+  title,
+  desc,
+  color,
+}: {
+  title: string;
+  desc: string;
+  color: string;
+}) => (
+  <Card className="border-none shadow-none hover:shadow-md transition-shadow p-8 text-center group">
+    <div
+      className={`w-20 h-20 ${color} rounded-full flex items-center justify-center mx-auto mb-6 transition-transform group-hover:scale-110`}
+    >
+      <BookOpen size={32} />
+    </div>
+    <h3 className="text-xl font-bold uppercase tracking-wider mb-4 text-[#111]">
+      {title}
+    </h3>
+    <p className="text-[#666] leading-relaxed">{desc}</p>
+  </Card>
+);

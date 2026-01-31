@@ -98,6 +98,9 @@ export interface BlogResponse {
   id: string;
   title: string;
   content: string;
+  category?: string;
+  excerpt?: string;
+  thumbnailUrl?: string;
   author: {
     id: string;
     name: string;

@@ -1,8 +1,3 @@
-/**
- * Input Component
- * Reusable form input with validation states
- */
-
 import { type InputHTMLAttributes, forwardRef } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -16,12 +11,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputId = id || label?.toLowerCase().replace(/\s+/g, "-");
 
     const inputClasses = [
-      "w-full px-4 py-2 border rounded-lg transition-colors duration-200",
-      "focus:outline-none focus:ring-2 focus:ring-offset-1",
+      "w-full px-4 py-3 border-2 transition-all duration-300 rounded-md text-slate-900 font-medium",
+      "focus:outline-none focus:ring-0", // Removing standard ring for custom border feel
       error
-        ? "border-red-500 focus:ring-red-500 focus:border-red-500"
-        : "border-gray-300 focus:ring-blue-500 focus:border-blue-500",
-      "disabled:bg-gray-100 disabled:cursor-not-allowed",
+        ? "border-red-500 bg-red-50"
+        : "border-slate-100 bg-[#f9f9f9] focus:border-[#7843e9] focus:bg-white",
+      "disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50",
       className,
     ].join(" ");
 
@@ -30,10 +25,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-[10px] font-black uppercase tracking-[0.2em] text-[#111] mb-2"
           >
             {label}
-            {props.required && <span className="text-red-500 ml-1">*</span>}
+            {props.required && <span className="text-[#7843e9] ml-1">*</span>}
           </label>
         )}
 
@@ -42,29 +37,16 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           id={inputId}
           className={inputClasses}
           aria-invalid={error ? "true" : "false"}
-          aria-describedby={
-            error
-              ? `${inputId}-error`
-              : helperText
-                ? `${inputId}-helper`
-                : undefined
-          }
           {...props}
         />
 
         {error && (
           <p
             id={`${inputId}-error`}
-            className="mt-1 text-sm text-red-600"
+            className="mt-2 text-[10px] font-bold uppercase tracking-wider text-red-600"
             role="alert"
           >
             {error}
-          </p>
-        )}
-
-        {helperText && !error && (
-          <p id={`${inputId}-helper`} className="mt-1 text-sm text-gray-500">
-            {helperText}
           </p>
         )}
       </div>

@@ -1,8 +1,7 @@
 /**
  * MyBlogsPage Component
- * Dashboard showing user's own blogs (protected)
+ * Dashboard for managing user blogs with a professional command-center aesthetic
  */
-
 import { useState } from "react";
 import { Link } from "react-router";
 import { MainLayout } from "@/shared/layouts/MainLayout";
@@ -10,6 +9,7 @@ import { Button, Loader, Alert } from "@/shared/components";
 import { BlogList } from "../components/BlogList";
 import { useMyBlogs } from "../hooks/useMyBlogs";
 import { ROUTES } from "@/constants";
+import { Plus } from "lucide-react";
 
 export const MyBlogsPage = () => {
   const { blogs, isLoading, error } = useMyBlogs();
@@ -17,64 +17,59 @@ export const MyBlogsPage = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-8 flex items-center justify-between">
+      {/* Header with Geometric Pattern (matches Hero) */}
+      <header className="relative bg-[#f8f8f8] py-5 px-8 border-b border-slate-200 overflow-hidden">
+        <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">My Blogs</h1>
-            <p className="text-lg text-gray-600">
-              Manage your published articles
+            <h1 className="text-4xl md:text-4xl font-black uppercase tracking-widest text-[#111] mb-2">
+              My <span className="text-[#7843e9]">Dashboard</span>
+            </h1>
+            <p className="text-sm font-bold text-slate-500 uppercase tracking-tighter">
+              Manage and scale your technical publications
             </p>
           </div>
+
           <Link to={ROUTES.CREATE_BLOG}>
-            <Button>
-              <span className="flex items-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                New Blog
-              </span>
+            <Button size="md" className="flex items-center gap-3">
+              <Plus size={20} strokeWidth={3} />
+              <span>Create New Blog</span>
             </Button>
           </Link>
-        </header>
+        </div>
+      </header>
 
+      <main className="max-w-7xl mx-auto px-8 py-12">
+        {/* Error Handling */}
         {(error || deleteError) && (
-          <Alert
-            variant="error"
-            className="mb-6"
-            onClose={() => setDeleteError(null)}
-          >
-            {error || deleteError}
-          </Alert>
+          <div className="mb-8">
+            <Alert
+              variant="error"
+              className="border-l-4 border-red-600 font-bold uppercase tracking-widest text-xs"
+              onClose={() => setDeleteError(null)}
+            >
+              {error || deleteError}
+            </Alert>
+          </div>
         )}
 
         {isLoading ? (
-          <div className="flex justify-center py-12">
-            <Loader size="lg" text="Loading your blogs..." />
+          <div className="flex flex-col items-center justify-center py-24 gap-4">
+            <Loader size="lg" />
+            <span className="font-black uppercase tracking-[0.2em] text-[#7843e9] text-xs">
+              Loading Dashboard...
+            </span>
           </div>
         ) : (
           <>
-            {blogs.length > 0 && (
-              <div className="mb-6 text-sm text-gray-600">
-                Total: {blogs.length} blog{blogs.length !== 1 ? "s" : ""}
-              </div>
-            )}
-            <BlogList
-              blogs={blogs}
-              emptyMessage="You haven't created any blogs yet. Start writing!"
-            />
+            <div className="relative">
+              <BlogList
+                blogs={blogs}
+                emptyMessage="Your library is currently empty."
+              />
+            </div>
           </>
         )}
-      </div>
+      </main>
     </MainLayout>
   );
 };
